@@ -140,4 +140,8 @@ export class AppComponent {
     this.invoice.products.push(new Product());
   }
   
+
+  removeRow(index: number){
+    this.invoice.products.splice(index,1);
+  }
 }
