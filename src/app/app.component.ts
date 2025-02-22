@@ -29,24 +29,38 @@ class Invoice{
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  pageSize: object = {
+    height: 1754,
+    width: 1240
+  };
+
   invoice = new Invoice(); 
   
-  generatePDF(action = 'open') {
+  async generatePDF(action = 'open') {
     let docDefinition = {
+      background:[
+        {
+          image: await this.getBase64ImageFromURL("../../assets/ssr-bg.jpg")
+        }
+      ],
+      // // pageSize: {
+      // //   width: 1270,
+      // //   height:1754
+      // },
       content: [
         {
-          text: 'ELECTRONIC SHOP',
-          fontSize: 16,
+          text: 'SSR Flowers & Decors',
+          fontSize: 20,
           alignment: 'center',
-          color: '#047886'
+          color: '#DE3163'
         },
         {
           text: 'INVOICE',
-          fontSize: 20,
+          fontSize: 16,
           bold: true,
           alignment: 'center',
           decoration: 'underline',
-          color: 'skyblue'
+          color: 'Crimson'
         },
         {
           text: 'Customer Details',
@@ -110,8 +124,8 @@ export class AppComponent {
         },
         {
             ul: [
-              'Order can be return in max 10 days.',
-              'Warrenty of the product will be subject to the manufacturer terms and conditions.',
+              'All floral arrangements are handmade with fresh flowers, but due to seasonal availability,',
+              'some flowers may vary from the pictures shown.',
               'This is system generated invoice.',
             ],
         }
@@ -120,6 +134,7 @@ export class AppComponent {
         sectionHeader: {
           bold: true,
           decoration: 'underline',
+          
           fontSize: 14,
           margin: [0, 15,0, 15]          
         }
@@ -143,5 +158,31 @@ export class AppComponent {
 
   removeRow(index: number){
     this.invoice.products.splice(index,1);
+  }
+
+  getBase64ImageFromURL(url) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute("crossOrigin", "anonymous");
+  
+      img.onload = () => {
+        var canvas = document.createElement("canvas");
+        canvas.width = 1270;
+        canvas.height = 1785;
+  
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+  
+        var dataURL = canvas.toDataURL("image/jpg");
+  
+        resolve(dataURL);
+      };
+  
+      img.onerror = error => {
+        reject(error);
+      };
+  
+      img.src = url;
+    });
   }
 }
